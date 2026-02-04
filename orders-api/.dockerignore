@@ -1,0 +1,15 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+.git
+.gitignore
+Dockerfile
+*.md
+.vscode
+.idea
+vendor

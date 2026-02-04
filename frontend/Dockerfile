@@ -12,11 +12,21 @@ RUN npm run build
 # Stage 2: Production - minimal nginx
 FROM nginx:alpine-slim
 
+# Create non-root user
+RUN adduser -D -H -s /sbin/nologin appuser && \
+    chown -R appuser:appuser /usr/share/nginx/html && \
+    chown -R appuser:appuser /var/cache/nginx && \
+    touch /var/run/nginx.pid && \
+    chown appuser:appuser /var/run/nginx.pid
+
 # Copy only the dist folder
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder --chown=appuser:appuser /app/dist /usr/share/nginx/html
 
 # Copy nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Switch to non-root user
+USER appuser
 
 EXPOSE 80
 
